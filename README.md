@@ -29,6 +29,10 @@ A unit-test in order to guarantee code consistence was written in /rover package
 
 To run unit-tests, just type "make unit-test" command in terminal at the repository root folder.
 
+The Rover core testing implementation is located in file <a href="https://github.com/leonardogazio/mars_rover_navigation/blob/develop/rover/rover_test.go">rover_test.go</a> into /rover package
+
+Test cases data files located into <a href="https://github.com/leonardogazio/mars_rover_navigation/tree/develop/rover/testdata">/testdata</a> directory inside /rover package.
+
 --------------------------------------------------------------------------------------------------------
 
 2- Second solution is a kind of "game" made via gRPC API endpoints, described in below proto file;<br/>
@@ -45,3 +49,9 @@ make run api=false input=/absolute/path/to/file.txt
 make run api=true
 
 It's possible connecting to the API through grpcui by typing "make ui" command after server is running.
+
+--------------------------------------------------------------------------------------------------------
+
+# Core;
+The entire business rules are located in /rover package, into file:<br/>
+https://github.com/leonardogazio/mars_rover_navigation/blob/develop/rover/rover.go
