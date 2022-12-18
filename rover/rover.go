@@ -117,12 +117,12 @@ func ParseFile(filePath string) (string, error) {
 
 	plateauX, err := strconv.Atoi(plateauCoords[0])
 	if err != nil {
-		return "", err
+		return "", errInvalidPlateauData
 	}
 
 	plateauY, err := strconv.Atoi(plateauCoords[1])
 	if err != nil {
-		return "", err
+		return "", errInvalidPlateauData
 	}
 
 	PlateauInstance = NewPlateau(int32(plateauY), int32(plateauX))
@@ -138,12 +138,12 @@ func ParseFile(filePath string) (string, error) {
 
 		roverX, err := strconv.Atoi(roverData[0])
 		if err != nil {
-			return "", err
+			return "", errInvalidRoverData
 		}
 
 		roverY, err := strconv.Atoi(roverData[1])
 		if err != nil {
-			return "", err
+			return "", errInvalidRoverData
 		}
 
 		regx, _ := regexp.Compile("(^[NESW]$)")

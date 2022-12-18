@@ -1,3 +1,5 @@
+PKGS ?= $(shell go list ./server/... ./rover/...)
+
 gen-proto:
 	protoc proto/service.proto \
 	--go_out=proto/ \
@@ -15,3 +17,6 @@ build:
 
 ui:
 	grpcui --plaintext localhost:${HTTP_PORT}
+
+unit-test:
+	go test -ldflags="-extldflags=-Wl,--allow-multiple-definition" -v ${PKGS}
