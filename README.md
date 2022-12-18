@@ -32,6 +32,7 @@ To run unit-tests, just type "make unit-test" command in terminal at the reposit
 --------------------------------------------------------------------------------------------------------
 
 1- Second solution is a kind of "game" made via gRPC API endpoints, described in below proto file;
+
 https://github.com/leonardogazio/mars_rover_navigation/blob/develop/proto/service.proto
 
 --------------------------------------------------------------------------------------------------------
