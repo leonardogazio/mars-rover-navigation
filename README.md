@@ -14,13 +14,13 @@ The output for each rover should be its final co-ordinates and heading.
 
 # Test Input:
 5 5<br/>
-1 2 N
-LMLMLMLMM
-3 3 E
+1 2 N<br/>
+LMLMLMLMM<br/>
+3 3 E<br/>
 MMRMMRMRRM
 
 # Expected Output
-1 3 N
+1 3 N<br/>
 5 1 E
 
 # Unit Testing:
@@ -31,8 +31,7 @@ To run unit-tests, just type "make unit-test" command in terminal at the reposit
 
 --------------------------------------------------------------------------------------------------------
 
-1- Second solution is a kind of "game" made via gRPC API endpoints, described in below proto file;
-
+1- Second solution is a kind of "game" made via gRPC API endpoints, described in below proto file;<br/>
 https://github.com/leonardogazio/mars_rover_navigation/blob/develop/proto/service.proto
 
 --------------------------------------------------------------------------------------------------------
