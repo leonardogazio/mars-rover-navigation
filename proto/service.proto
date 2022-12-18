@@ -4,6 +4,8 @@ package pb;
 
 option go_package = "/pb";
 
+import "google/protobuf/empty.proto";
+
 enum Direction {
     L = 0;
     R = 1;
@@ -16,12 +18,19 @@ enum Orientation {
     W = 270;
 }
 
+message SetPlateauReq {
+    int32 Upper = 1;
+    int32 Right = 2;
+}
+
 message RotateReq {
-    Direction Direction = 1;
+    string    RoverID   = 1;
+    Direction Direction = 2;
 }
 
 message GoForwardReq {
-    int32 NumberOfSteps = 1;
+    string RoverID       = 1;
+    int32  NumberOfSteps = 2;
 }
 
 message RoverPosition {
@@ -31,7 +40,23 @@ message RoverPosition {
     string      SquadIncomingMessage = 4;
 }
 
+message Rover {
+    string        RoverID  = 1;
+    RoverPosition Position = 2;
+}
+
+message LandDownReq {
+    repeated Rover RoverList = 1;
+}
+
+message RoverSquad {
+    repeated Rover Rovers = 1;
+}
+
 service MarsRoverNavigateService {
-    rpc Rotate(RotateReq) returns (RoverPosition);
-    rpc GoForward(GoForwardReq) returns (RoverPosition);
+    rpc SetPlateau(SetPlateauReq) returns (google.protobuf.Empty);
+    rpc LandDown(LandDownReq) returns (google.protobuf.Empty);
+    rpc Rotate(RotateReq) returns (Rover);
+    rpc GoForward(GoForwardReq) returns (Rover);
+    rpc ShowSquad(google.protobuf.Empty) returns (RoverSquad);
 }

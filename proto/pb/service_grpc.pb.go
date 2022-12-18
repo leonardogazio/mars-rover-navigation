@@ -4,6 +4,7 @@ package pb
 
 import (
 	context "context"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -18,8 +19,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MarsRoverNavigateServiceClient interface {
-	Rotate(ctx context.Context, in *RotateReq, opts ...grpc.CallOption) (*RoverPosition, error)
-	GoForward(ctx context.Context, in *GoForwardReq, opts ...grpc.CallOption) (*RoverPosition, error)
+	SetPlateau(ctx context.Context, in *SetPlateauReq, opts ...grpc.CallOption) (*empty.Empty, error)
+	LandDown(ctx context.Context, in *LandDownReq, opts ...grpc.CallOption) (*empty.Empty, error)
+	Rotate(ctx context.Context, in *RotateReq, opts ...grpc.CallOption) (*Rover, error)
+	GoForward(ctx context.Context, in *GoForwardReq, opts ...grpc.CallOption) (*Rover, error)
+	ShowSquad(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*RoverSquad, error)
 }
 
 type marsRoverNavigateServiceClient struct {
@@ -30,8 +34,26 @@ func NewMarsRoverNavigateServiceClient(cc grpc.ClientConnInterface) MarsRoverNav
 	return &marsRoverNavigateServiceClient{cc}
 }
 
-func (c *marsRoverNavigateServiceClient) Rotate(ctx context.Context, in *RotateReq, opts ...grpc.CallOption) (*RoverPosition, error) {
-	out := new(RoverPosition)
+func (c *marsRoverNavigateServiceClient) SetPlateau(ctx context.Context, in *SetPlateauReq, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/pb.MarsRoverNavigateService/SetPlateau", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marsRoverNavigateServiceClient) LandDown(ctx context.Context, in *LandDownReq, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/pb.MarsRoverNavigateService/LandDown", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marsRoverNavigateServiceClient) Rotate(ctx context.Context, in *RotateReq, opts ...grpc.CallOption) (*Rover, error) {
+	out := new(Rover)
 	err := c.cc.Invoke(ctx, "/pb.MarsRoverNavigateService/Rotate", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -39,9 +61,18 @@ func (c *marsRoverNavigateServiceClient) Rotate(ctx context.Context, in *RotateR
 	return out, nil
 }
 
-func (c *marsRoverNavigateServiceClient) GoForward(ctx context.Context, in *GoForwardReq, opts ...grpc.CallOption) (*RoverPosition, error) {
-	out := new(RoverPosition)
+func (c *marsRoverNavigateServiceClient) GoForward(ctx context.Context, in *GoForwardReq, opts ...grpc.CallOption) (*Rover, error) {
+	out := new(Rover)
 	err := c.cc.Invoke(ctx, "/pb.MarsRoverNavigateService/GoForward", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marsRoverNavigateServiceClient) ShowSquad(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*RoverSquad, error) {
+	out := new(RoverSquad)
+	err := c.cc.Invoke(ctx, "/pb.MarsRoverNavigateService/ShowSquad", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +83,11 @@ func (c *marsRoverNavigateServiceClient) GoForward(ctx context.Context, in *GoFo
 // All implementations must embed UnimplementedMarsRoverNavigateServiceServer
 // for forward compatibility
 type MarsRoverNavigateServiceServer interface {
-	Rotate(context.Context, *RotateReq) (*RoverPosition, error)
-	GoForward(context.Context, *GoForwardReq) (*RoverPosition, error)
+	SetPlateau(context.Context, *SetPlateauReq) (*empty.Empty, error)
+	LandDown(context.Context, *LandDownReq) (*empty.Empty, error)
+	Rotate(context.Context, *RotateReq) (*Rover, error)
+	GoForward(context.Context, *GoForwardReq) (*Rover, error)
+	ShowSquad(context.Context, *empty.Empty) (*RoverSquad, error)
 	mustEmbedUnimplementedMarsRoverNavigateServiceServer()
 }
 
@@ -61,11 +95,20 @@ type MarsRoverNavigateServiceServer interface {
 type UnimplementedMarsRoverNavigateServiceServer struct {
 }
 
-func (UnimplementedMarsRoverNavigateServiceServer) Rotate(context.Context, *RotateReq) (*RoverPosition, error) {
+func (UnimplementedMarsRoverNavigateServiceServer) SetPlateau(context.Context, *SetPlateauReq) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetPlateau not implemented")
+}
+func (UnimplementedMarsRoverNavigateServiceServer) LandDown(context.Context, *LandDownReq) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LandDown not implemented")
+}
+func (UnimplementedMarsRoverNavigateServiceServer) Rotate(context.Context, *RotateReq) (*Rover, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Rotate not implemented")
 }
-func (UnimplementedMarsRoverNavigateServiceServer) GoForward(context.Context, *GoForwardReq) (*RoverPosition, error) {
+func (UnimplementedMarsRoverNavigateServiceServer) GoForward(context.Context, *GoForwardReq) (*Rover, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GoForward not implemented")
+}
+func (UnimplementedMarsRoverNavigateServiceServer) ShowSquad(context.Context, *empty.Empty) (*RoverSquad, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowSquad not implemented")
 }
 func (UnimplementedMarsRoverNavigateServiceServer) mustEmbedUnimplementedMarsRoverNavigateServiceServer() {
 }
@@ -79,6 +122,42 @@ type UnsafeMarsRoverNavigateServiceServer interface {
 
 func RegisterMarsRoverNavigateServiceServer(s grpc.ServiceRegistrar, srv MarsRoverNavigateServiceServer) {
 	s.RegisterService(&MarsRoverNavigateService_ServiceDesc, srv)
+}
+
+func _MarsRoverNavigateService_SetPlateau_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetPlateauReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarsRoverNavigateServiceServer).SetPlateau(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.MarsRoverNavigateService/SetPlateau",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarsRoverNavigateServiceServer).SetPlateau(ctx, req.(*SetPlateauReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MarsRoverNavigateService_LandDown_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LandDownReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarsRoverNavigateServiceServer).LandDown(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.MarsRoverNavigateService/LandDown",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarsRoverNavigateServiceServer).LandDown(ctx, req.(*LandDownReq))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _MarsRoverNavigateService_Rotate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -117,6 +196,24 @@ func _MarsRoverNavigateService_GoForward_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MarsRoverNavigateService_ShowSquad_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(empty.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarsRoverNavigateServiceServer).ShowSquad(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.MarsRoverNavigateService/ShowSquad",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarsRoverNavigateServiceServer).ShowSquad(ctx, req.(*empty.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MarsRoverNavigateService_ServiceDesc is the grpc.ServiceDesc for MarsRoverNavigateService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -125,12 +222,24 @@ var MarsRoverNavigateService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MarsRoverNavigateServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "SetPlateau",
+			Handler:    _MarsRoverNavigateService_SetPlateau_Handler,
+		},
+		{
+			MethodName: "LandDown",
+			Handler:    _MarsRoverNavigateService_LandDown_Handler,
+		},
+		{
 			MethodName: "Rotate",
 			Handler:    _MarsRoverNavigateService_Rotate_Handler,
 		},
 		{
 			MethodName: "GoForward",
 			Handler:    _MarsRoverNavigateService_GoForward_Handler,
+		},
+		{
+			MethodName: "ShowSquad",
+			Handler:    _MarsRoverNavigateService_ShowSquad_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

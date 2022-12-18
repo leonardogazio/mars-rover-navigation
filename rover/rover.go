@@ -1,6 +1,13 @@
 package rover
 
 import (
+	"bufio"
+	"fmt"
+	"os"
+	"regexp"
+	"strconv"
+	"strings"
+
 	"github.com/leonardogazio/mars_rover_navigation/proto/pb"
 )
 
@@ -11,37 +18,40 @@ type Position struct {
 
 // Plateau ...
 type Plateau struct {
-	W, H int32
+	R, U int32
 }
 
 // Rover ...
 type Rover struct {
+	ID                   string
 	Position             Position
 	Angle                int32
 	SquadIncomingMessage string
 }
 
-// NewPlateau - Returns a new Plateau instance reference.
-func NewPlateau() *Plateau {
-	return &Plateau{W: 1000, H: 700}
-}
+var (
+	// RoverSquad ...
+	RoverSquad map[string]*Rover = map[string]*Rover{}
+	// PlateauInstance ...
+	PlateauInstance *Plateau
+)
 
-// Rover - Returns a new Rover instance reference.
-func NewRover() *Rover {
-	return new(Rover)
+// NewPlateau - Returns a new Plateau instance reference.
+func NewPlateau(upper, right int32) *Plateau {
+	return &Plateau{R: right, U: upper}
 }
 
 // Contains - Checks if Plateau contains the Rover inside.
 func (p *Plateau) Contains(r *Rover) bool {
-	return r.Position.X >= 0 && r.Position.X <= p.W && r.Position.Y >= 0 && r.Position.Y <= p.H
+	return r.Position.X >= 0 && r.Position.X <= p.R && r.Position.Y >= 0 && r.Position.Y <= p.U
 }
 
 // Rotate - Rotates the Rover object to selected direction L/R
 func (r *Rover) Rotate(direction string) *Rover {
 	if direction == "L" {
-		r.Angle = r.Angle - 90
+		r.Angle -= 90
 	} else {
-		r.Angle = r.Angle + 90
+		r.Angle += 90
 	}
 	r.Angle = (r.Angle + 360) % 360
 	return r
@@ -75,11 +85,95 @@ func (r *Rover) GoForward(p *Plateau, numberOfSteps int32) *Rover {
 	return r
 }
 
-func (r *Rover) ToProto() *pb.RoverPosition {
-	return &pb.RoverPosition{
-		X:                    r.Position.X,
-		Y:                    r.Position.Y,
-		Orientation:          pb.Orientation(r.Angle),
-		SquadIncomingMessage: r.SquadIncomingMessage,
+func (r *Rover) ToProto() *pb.Rover {
+	return &pb.Rover{
+		RoverID: r.ID,
+		Position: &pb.RoverPosition{
+			X:                    r.Position.X,
+			Y:                    r.Position.Y,
+			Orientation:          pb.Orientation(r.Angle),
+			SquadIncomingMessage: r.SquadIncomingMessage,
+		},
 	}
+}
+
+// ParseFile - Loads plateau and rover list and move them from file
+func ParseFile(filePath string) (string, error) {
+	f, err := os.Open(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	s := bufio.NewScanner(f)
+	s.Split(bufio.ScanLines)
+	s.Scan()
+
+	plateauCoords := strings.Split(s.Text(), " ")
+
+	if len(plateauCoords) != 2 {
+		return "", errInconsistentPlateauData
+	}
+
+	plateauX, err := strconv.Atoi(plateauCoords[0])
+	if err != nil {
+		return "", err
+	}
+
+	plateauY, err := strconv.Atoi(plateauCoords[1])
+	if err != nil {
+		return "", err
+	}
+
+	PlateauInstance = NewPlateau(int32(plateauY), int32(plateauX))
+
+	res := ""
+
+	for s.Scan() {
+		roverData := strings.Split(s.Text(), " ")
+
+		if len(roverData) != 3 {
+			return "", errInconsistentRoverData
+		}
+
+		roverX, err := strconv.Atoi(roverData[0])
+		if err != nil {
+			return "", err
+		}
+
+		roverY, err := strconv.Atoi(roverData[1])
+		if err != nil {
+			return "", err
+		}
+
+		regx, _ := regexp.Compile("(^[NESW]$)")
+		if !regx.MatchString(roverData[2]) {
+			return "", errInvalidCompassDirection
+		}
+
+		roverObj := &Rover{
+			Position: Position{X: int32(roverX), Y: int32(roverY)},
+			Angle:    pb.Orientation_value[roverData[2]],
+		}
+
+		s.Scan()
+
+		regx, _ = regexp.Compile(`^[LRM\.\,\+\-]*$`)
+		if !regx.MatchString(s.Text()) {
+			return "", errMovementCommand
+		}
+
+		for _, c := range s.Text() {
+			switch cmd := fmt.Sprintf("%c", c); {
+			case cmd == "L", cmd == "R":
+				roverObj.Rotate(cmd)
+			case cmd == "M":
+				roverObj.GoForward(PlateauInstance, 1)
+			}
+		}
+
+		res += fmt.Sprintf("%d %d %s\r\n", roverObj.Position.X, roverObj.Position.Y, pb.Orientation_name[roverObj.Angle])
+	}
+
+	return res, nil
 }

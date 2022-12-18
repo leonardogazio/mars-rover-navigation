@@ -8,7 +8,10 @@ tidy:
 	go mod tidy
 
 run:
-	go run .
+	go run . -api=$(api) -input=$(input)
+
+build:
+	go build -o ./bin/app
 
 ui:
 	grpcui --plaintext localhost:${HTTP_PORT}

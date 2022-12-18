@@ -5,7 +5,6 @@ import (
 	"net"
 
 	"github.com/leonardogazio/mars_rover_navigation/proto/pb"
-	"github.com/leonardogazio/mars_rover_navigation/rover"
 	"github.com/leonardogazio/mars_rover_navigation/utils"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -15,13 +14,6 @@ import (
 type MarsRoverNavigateServiceServer struct {
 	pb.MarsRoverNavigateServiceServer
 }
-
-var (
-	// RoverInstance ...
-	RoverInstance *rover.Rover
-	// PlateauInstance ...
-	PlateauInstance *rover.Plateau
-)
 
 // StartGRPC ...
 func StartGRPC() error {
