@@ -31,8 +31,6 @@ To run unit-tests, just type "make unit-test" command in terminal at the reposit
 
 The Rover core testing implementation is located in file <a href="https://github.com/leonardogazio/mars_rover_navigation/blob/develop/rover/rover_test.go">rover_test.go</a> into /rover package
 
-Test cases data files located into <a href="https://github.com/leonardogazio/mars_rover_navigation/tree/develop/rover/testdata">/testdata</a> directory inside /rover package.
-
 --------------------------------------------------------------------------------------------------------
 
 2- Second solution is a kind of "game" made via gRPC API endpoints, described in below proto file;<br/>
