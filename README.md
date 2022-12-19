@@ -46,7 +46,7 @@ Usage:
 2- Run as gRPC API;
 <b>make run api=true</b>
 
-It's possible connecting to the API through grpcui by typing "make ui" command after server is running.
+It's possible connecting to the API through grpcui by typing <b>make ui</b> command after server is running.
 
 --------------------------------------------------------------------------------------------------------
 
