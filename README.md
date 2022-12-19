@@ -27,7 +27,7 @@ MMRMMRMRRM
 
 A unit-test in order to guarantee code consistence was written in /rover package, testing ParseFile function with various success and error test cases implemented in a table test.
 
-To run unit-tests, just type "make unit-test" command in terminal at the repository root folder.
+To run unit-tests, just type <b>make unit-test</b> command in terminal at the repository root folder.
 
 The Rover core testing implementation is located in file <a href="https://github.com/leonardogazio/mars_rover_navigation/blob/develop/rover/rover_test.go">rover_test.go</a> into /rover package
 
@@ -41,10 +41,10 @@ https://github.com/leonardogazio/mars_rover_navigation/blob/develop/proto/servic
 Usage:
 
 1- File parsing as CLI application;
-make run api=false input=/absolute/path/to/file.txt
+<b>make run api=false input=/absolute/path/to/file.txt</b>
 
 2- Run as gRPC API;
-make run api=true
+<b>make run api=true</b>
 
 It's possible connecting to the API through grpcui by typing "make ui" command after server is running.
 
