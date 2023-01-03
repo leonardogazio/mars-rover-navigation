@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mars-rover-navigation
+spec:
+  template:
+    metadata:
+      annotations:
+    spec:
+      containers:
+        - name: mars-rover-navigation
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi

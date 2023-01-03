@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: grpc-server
+  name: mars-rover-navigation
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: grpc-server
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: grpc-server
+    spec:
+      serviceAccountName: mars-rover-navigation 
+      nodeSelector:
+        role: common
+      containers:
+        - image: mars-rover-navigation
+          imagePullPolicy: Always
+          command: ["bash", "-c", "app"]
+          name: mars-rover-navigation
+          ports:
+            - containerPort: 50000
+              name: grpc
+              protocol: TCP
+          resources: {}
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+            tcpSocket:
+              port: grpc
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+            tcpSocket:
+              port: grpc
+      imagePullSecrets:
+        - name: docker-mars-rover-navigation
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: grpc-server
+  name: mars-rover-navigation
+spec:
+  ports:
+    - port: 50000
+      name: grpc
+      protocol: TCP
+  selector:
+    app.kubernetes.io/component: grpc-server
