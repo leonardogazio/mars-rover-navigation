@@ -1,4 +1,4 @@
-module github.com/leonardogazio/mars_rover_navigation
+module github.com/leonardogazio/mars-rover-navigation
 
 go 1.18
 

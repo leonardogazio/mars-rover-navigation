@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/leonardogazio/mars_rover_navigation/proto/pb"
+	"github.com/leonardogazio/mars-rover-navigation/proto/pb"
 )
 
 // Position ...

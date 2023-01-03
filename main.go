@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/leonardogazio/mars_rover_navigation/rover"
-	"github.com/leonardogazio/mars_rover_navigation/server"
+	"github.com/leonardogazio/mars-rover-navigation/rover"
+	"github.com/leonardogazio/mars-rover-navigation/server"
 )
 
 func main() {

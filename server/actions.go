@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 
-	"github.com/leonardogazio/mars_rover_navigation/proto/pb"
-	"github.com/leonardogazio/mars_rover_navigation/rover"
+	"github.com/leonardogazio/mars-rover-navigation/proto/pb"
+	"github.com/leonardogazio/mars-rover-navigation/rover"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

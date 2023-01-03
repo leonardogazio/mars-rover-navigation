@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/leonardogazio/mars_rover_navigation/proto/pb"
-	"github.com/leonardogazio/mars_rover_navigation/utils"
+	"github.com/leonardogazio/mars-rover-navigation/proto/pb"
+	"github.com/leonardogazio/mars-rover-navigation/utils"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
