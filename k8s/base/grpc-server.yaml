@@ -58,3 +58,20 @@ spec:
       protocol: TCP
   selector:
     app.kubernetes.io/component: grpc-server
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: mars-rover-navigation
+  annotations:
+    kubernetes.io/ingress.class: gce
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          serviceName: mars-rover-navigation
+          servicePort: 50000
