@@ -73,5 +73,7 @@ spec:
       - path: /
         pathType: ImplementationSpecific
         backend:
-          serviceName: mars-rover-navigation
-          servicePort: 50000
+          service:
+            name: mars-rover-navigation
+            port:
+              number: 50000
