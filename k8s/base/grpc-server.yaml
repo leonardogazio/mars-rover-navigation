@@ -20,7 +20,7 @@ spec:
           imagePullPolicy: Always
           command: ["bash", "-c", "app"]
           args:
-          - -api=true;
+          - -api=true
           name: mars-rover-navigation
           ports:
             - containerPort: 50000
