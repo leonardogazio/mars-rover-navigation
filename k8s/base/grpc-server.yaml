@@ -15,9 +15,7 @@ spec:
       labels:
         app.kubernetes.io/component: grpc-server
     spec:
-      serviceAccountName: mars-rover-navigation 
-      nodeSelector:
-        role: common
+      serviceAccountName: mars-rover-navigation
       containers:
         - image: mars-rover-navigation
           imagePullPolicy: Always
