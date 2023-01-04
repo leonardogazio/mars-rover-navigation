@@ -57,27 +57,6 @@ spec:
       targetPort: 50000
       name: grpc
       protocol: TCP
+  type: LoadBalancer
   selector:
     app.kubernetes.io/component: grpc-server
-  type: ClusterIP
-
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-  name: mars-rover-navigation
-spec:
-  ingressClassName: nginx
-  rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: mars-rover-navigation
-            port:
-              number: 80
