@@ -15,6 +15,9 @@ run:
 build:
 	go build -o ./bin/app
 
+build-x:
+	docker run --rm -v $(pwd):/go/src/app -w /go/src/app leonardogazio/go:1.18 gox -osarch="linux/amd64" -output="bin/app"
+
 ui:
 	grpcui --plaintext localhost:${HTTP_PORT}
 
