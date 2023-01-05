@@ -13,12 +13,23 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/component: grpc-server
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "internal-app"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-inject-secret-config: "mars-rover-navigation/env"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{ with secret "mars-rover-navigation/env" -}}
+            {{ range $key, $value := .Data.data }}
+              export {{ $key }}="{{ $value }}"
+            {{ end }}
+          {{- end }}        
     spec:
       serviceAccountName: mars-rover-navigation
       containers:
         - image: mars-rover-navigation
           imagePullPolicy: Always
-          command: ["bash", "-c", "app -api=true"]
+          command: ["bash", "-c", "source internal/database/config && app -api=true"]
           name: mars-rover-navigation
           ports:
             - containerPort: 50000
