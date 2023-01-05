@@ -7,4 +7,4 @@ resources:
 images:
 - name: mars-rover-navigation
   newName: gcr.io/quiet-groove-373616/mars-rover-navigation
-  newTag: fcd202a
+  newTag: 32171d6

@@ -29,7 +29,7 @@ spec:
       containers:
         - image: mars-rover-navigation
           imagePullPolicy: Always
-          command: ["bash", "-c", "source internal/database/config && app -api=true"]
+          command: ["bash", "-c", "app -api=true"]
           name: mars-rover-navigation
           ports:
             - containerPort: 50000
